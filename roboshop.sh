@@ -14,9 +14,9 @@ INSTANCES_ID=$(aws ec2 run-instances --image-id ami-09c813fb71547fc4f --instance
 
 if [ $instance != "frontend" ]
 then
-  ip=aws ec2 describe-instances --instance-ids i-0abcdef123456789 --query "Reservations[0].Instances[0].PrivateIpAddress" --output text
+  ip=$(aws ec2 describe-instances --instance-ids i-0abcdef123456789 --query "Reservations[0].Instances[0].PrivateIpAddress" --output text)
 else
-  ip=aws ec2 describe-instances --instance-ids i-0abcdef123456789 --query "Reservations[0].Instances[0].PublicIpAddress" --output text
+  ip=$(aws ec2 describe-instances --instance-ids i-0abcdef123456789 --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
 fi
 echo "$instance IP Address: $ip" 
 done 

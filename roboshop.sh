@@ -9,7 +9,7 @@ DOMAIN_NAME="sridharmeka.site"
 
 for instances in ${INSTANCES[@]}
 do 
-    INSTANCES_ID=$(aws ec2 run-instances --image-id ami-09c813fb71547fc4f --instance-type t2.micro --security-group-ids sg-0a95ef1237f82de1c --tag-specifications "ResourceType=instance,Tags=[{Key=Name, Value=$Instance}]" --query "Instances[0].InstanceId" --output text)
+    INSTANCES_ID=$(aws ec2 run-instances --image-id ami-09c813fb71547fc4f --instance-type t2.micro --security-group-ids sg-0a95ef1237f82de1c --tag-specifications 'ResourceType=instance,Tags=[{Key=Name, Value=$Instance}]' --query "Instances[0].InstanceId" --output text)
 
 if  [ $instance != "frontend" ]
 then

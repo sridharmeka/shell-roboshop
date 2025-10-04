@@ -11,12 +11,12 @@ for instances in ${INSTANCES[@]}
 do 
     INSTANCES_ID=$(aws ec2 run-instances --image-id ami-09c813fb71547fc4f --instance-type t2.micro --security-group-ids sg-0a95ef1237f82de1c --tag-specifications "ResourceType=instance,Tags=[{Key=Name, Value=test}]" --query "Instances[0].InstanceId" --output text)
 
-if  [ $instance ! = "frontend" ]
-then
+ if  [ $instance != "frontend" ]
+ then
     ip=$(aws ec2 describe-instances --instance-ids $INSTANCES_ID --query "Reservations[0].Instances[0].PrivateIpAddress" --output text)
-else
+ else
     ip=$(aws ec2 describe-instances --instance-ids $INSTANCES_ID --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
-fi
+ fi
     echo "$instance IP Address: $IP"
 
 done 

@@ -40,15 +40,22 @@ VALIDATE $? "Enabling NodeJS:20"
 dnf install nodejs -y &>>$LOG_FILE
 VALIDATE $? "Installing NodeJS:20"
 
-useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
-VALIDATE $? "Creating roboshop system user"
+id roboshop
+if [ $? -ne 0 ]
+then
+    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
+    VALIDATE $? "Creating roboshop system user"
+else
+    echo -e "System user roboshop already created ... $Y SKIPPING $N"
+fi
 
-mkdir /app 
+mkdir -p /app 
 VALIDATE $? "Creating /app directory"
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
 VALIDATE $? "Downloading catalogue"
 
+rm -rf /app/*
 cd /app 
 unzip /tmp/catalogue.zip &>>$LOG_FILE
 VALIDATE $? "unziping catalogue"
@@ -68,5 +75,11 @@ cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongodb.repo
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Installing MongoDB client"
 
-mongosh --host mongodb.sridharmeka.site </app/db/master-data.js &>>$LOG_FILE
-VALIDATE $? "Loading data into MongoDB"
+STATUS=$(mongosh --host mongodb.sridharmeka.site --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
+if [ $STATUS -lt 0 ]
+then
+    mongosh --host mongodb.sridharmeka.site </app/db/master-data.js &>>$LOG_FILE
+    VALIDATE $? "Loading data into MongoDB"
+else
+    echo -e "Data is already loaded ... $Y SKIPPING $N"
+fi

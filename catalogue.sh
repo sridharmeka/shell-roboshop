@@ -68,4 +68,4 @@ cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongodb.repo
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Installing MongoDB client"
 
-mongosh --host mongodb.sridharmeka.site </app/schema/catalogue.js &>>$LOG_FILE
+mongosh --host mongodb.sridharmeka.site </app/db/master-data.js &>>$LOG_FILE

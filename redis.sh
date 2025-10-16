@@ -1,5 +1,6 @@
 #!/bin/bash
 
+START_TIME=$(date +%s)
 USERID=$(id -u)
 R="\e[31m"
 G="\e[32m"
@@ -44,4 +45,4 @@ VALIDATE $? "Starting Redis"
 
 END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
-echo -e "Script executed in: $Y $TOTAL_TIME Seconds $N"
+echo -e "Script executed in: $Y $TOTAL_TIME Seconds $N" | tee -a $LOG_FILE

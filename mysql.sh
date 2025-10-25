@@ -14,32 +14,42 @@ SCRIPT_DIR=$PWD
 mkdir -p $LOGS_FOLDER
 echo "Script started executed at: $(date)" | tee -a $LOG_FILE
 
-if [ $USERID -ne 0 ]; then
-    echo "ERROR:: Please run this script with root privelege"
-    exit 1 # failure is other than 0
-
+if [ $USERID -ne 0 ];
+then
+    echo -e "$R ERROR:: Please run this script with root privelege"
+    exit 1 #GIVE OTHER THAN 0 UPTO 127
+else
+    echo "You are running with root access" | tee -a $LOG_FILE
 fi
+echo "Please enter root Password to setup"
 
+read -s MYSQL_ROOT_PASSWORD
 
-VALIDATE(){ # functions receive inputs through args just like shell script args
-    if [ $1 -ne 0 ]; then
+# validation function takes input as exit, what command they tried to install
+
+VALIDATE(){ 
+    if [ $1 -eq 0 ]; then
         echo -e "$2 ... $R FAILURE $N" | tee -a $LOG_FILE
         exit 1
     else
         echo -e "$2 ... $G SUCCESS $N" | tee -a $LOG_FILE
+        exit 1
     fi
 }
 
 dnf install mysql-server -y &>>$LOG_FILE
 VALIDATE $? "Installing MySQL Server"
+
 systemctl enable mysqld &>>$LOG_FILE
 VALIDATE $? "Enabling MySQL Server"
+
 systemctl start mysqld   &>>$LOG_FILE
 VALIDATE $? "Starting MySQL Server"
 
 mysql_secure_installation --set-root-pass $MYSQL_ROOT_PASSWORD &>>$LOG_FILE
-VALIDATE $? "Setting up Root password"
+VALIDATE $? "Setting MYSQL Root password"
 
 END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
+
 echo -e "Script executed in: $Y $TOTAL_TIME Seconds $N" | tee -a $LOG_FILE

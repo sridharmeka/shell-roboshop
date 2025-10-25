@@ -17,12 +17,9 @@ echo "Script started executed at: $(date)" | tee -a $LOG_FILE
 if [ $USERID -ne 0 ]; then
     echo "ERROR:: Please run this script with root privelege"
     exit 1 # failure is other than 0
-else
-    echo "You are running with root access" | tee -a $LOG_FILE
+
 fi
 
-echo "please enter root password to setup"
-read -s MYSQL_ROOT_PASSWORD
 
 VALIDATE(){ # functions receive inputs through args just like shell script args
     if [ $1 -ne 0 ]; then

@@ -28,11 +28,12 @@ read -s MYSQL_ROOT_PASSWORD
 # validation function takes input as exit, what command they tried to install
 
 VALIDATE(){ 
-    if [ $1 -eq 0 ]; then
-        echo -e "$2 ... $R FAILURE $N" | tee -a $LOG_FILE
+    if [ $1 -eq 0 ]; \
+    then
+        echo -e "$2 ... $G SUCCESS $N" | tee -a $LOG_FIL
         exit 1
     else
-        echo -e "$2 ... $G SUCCESS $N" | tee -a $LOG_FILE
+        echo -e "$2 ... $R FAILURE $N" | tee -a $LOG_FILE\
         exit 1
     fi
 }
